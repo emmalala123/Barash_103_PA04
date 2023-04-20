@@ -1,8 +1,19 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  /* background-color: #222222; */
+  /* color: #eff2f3; */
 }
 
 a {
   color: #00B7FF;
+}
+
+.t-put {
+  display: block;
+  margin: 5px 0;
+}
+
+.col{
+  color: #eff2f3;
 }
