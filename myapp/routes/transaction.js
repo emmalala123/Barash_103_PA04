@@ -24,20 +24,56 @@ isLoggedIn = (req,res,next) => {
 router.get('/transaction/',
   isLoggedIn,
   async (req, res, next) => {
-      const show = req.query.show
-      const category = show=='category'
-      let items=[]
-      if (show) { // show is completed or todo, so just show some items
-        items = 
-          await Transaction.find({userId:req.user._id, category})
-                        .sort({category:1,amount:1,description:1,createdAt:1})
-      }else {  // show is null, so show all of the items
-        items = 
-          await Transaction.find({userId:req.user._id})
-                        // .sort({category:1,priority:1,createdAt:1})
+    const show = req.query.show
+    let sortParams = {};
+    let items = [];
+    switch(show){
+      case 'category':
+        sortParams = { category: 1, createdAt: 1 };
+        items = await Transaction.find({ userId: req.user._id }).sort(sortParams);
+        break;
 
-      }
-            res.render('transaction', {items, show, category});
+      case 'amount':
+        sortParams = { amount: 1, createdAt: 1 };
+        items = await Transaction.find({ userId: req.user._id }).sort(sortParams);
+        break;
+
+      case 'description':
+        sortParams = { description: 1, createdAt: 1 };
+        items = await Transaction.find({ userId: req.user._id }).sort(sortParams);
+        break;
+
+      case 'date':
+        sortParams = { createdAt: 1 };
+        items = await Transaction.find({ userId: req.user._id }).sort(sortParams);
+        break;
+
+    case 'group-by-category':
+        items = await Transaction.aggregate([
+            { $match: { userId: req.user._id } },
+            {
+            $group: {
+                _id: '$category',
+                totalAmount: { $sum: '$amount' }
+            }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+        break;
+
+      default:
+        sortParams = { createdAt: 1 };
+        items = await Transaction.find({ userId: req.user._id }).sort(sortParams);
+        break;
+    }
+
+    // reverse sort order for descending fields
+    if (show === 'amount' || show === 'description') {
+      sortParams[show] = -1;
+      items = await Transaction.find({ userId: req.user._id }).sort(sortParams);
+    }
+
+    res.render('transaction', { items, show, sortParams });
 });
 
 
@@ -66,13 +102,13 @@ router.get('/transaction/remove/:itemId',
       res.redirect('/transaction')
 });
 
-// router.get('/transaction/complete/:itemId',
+// router.get('/transaction/category/:itemId',
 //   isLoggedIn,
 //   async (req, res, next) => {
-//       console.log("inside /transaction/complete/:itemId")
+//       console.log("inside /transaction/category/:itemId")
 //       await Transaction.findOneAndUpdate(
-//         {_id:req.params.itemId},
-//         {$set: {completed:true}} );
+//         {_id:req.params.itemId}, );
+//         // {$set: {completed:true}} );
 //       res.redirect('/transaction')
 // });
 
