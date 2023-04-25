@@ -18,7 +18,8 @@
     "http-errors": "~1.6.3",
     "install": "^0.13.0",
     "mongodb": "^5.3.0",
-    "mongoose": "^7.0.4",
+    "mongoose": "~6.0.1",
+    "mongosh": "^0.0.1",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.22",
     "npm": "^9.6.5"

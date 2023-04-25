@@ -48,7 +48,7 @@ router.get('/transaction/',
         items = await Transaction.find({ userId: req.user._id }).sort(sortParams);
         break;
 
-    case 'group-by-category':
+      case 'group-by-category':
         items = await Transaction.aggregate([
             { $match: { userId: req.user._id } },
             {
@@ -59,6 +59,23 @@ router.get('/transaction/',
             },
             { $sort: { _id: 1 } }
         ]);
+        // router.get('/transaction/group-by-category',
+        // async (req, res, next) => {
+        //     let results =
+        //           await Transaction.aggregate(
+        //               [ 
+        //                 {$group:{
+        //                   _id:'$userId',
+        //                   total:{$count:{}}
+        //                   }},
+        //                 {$sort:{total:-1}},              
+        //               ])
+                    
+        //       results = 
+        //          await User.populate(results,
+        //                  {path:'_id',
+        //                  select:['username','age']})
+        //          });
         break;
 
       default:
@@ -102,26 +119,6 @@ router.get('/transaction/remove/:itemId',
       res.redirect('/transaction')
 });
 
-// router.get('/transaction/category/:itemId',
-//   isLoggedIn,
-//   async (req, res, next) => {
-//       console.log("inside /transaction/category/:itemId")
-//       await Transaction.findOneAndUpdate(
-//         {_id:req.params.itemId}, );
-//         // {$set: {completed:true}} );
-//       res.redirect('/transaction')
-// });
-
-// router.get('/transaction/uncomplete/:itemId',
-//   isLoggedIn,
-//   async (req, res, next) => {
-//       console.log("inside /transaction/complete/:itemId")
-//       await Transaction.findOneAndUpdate(
-//         {_id:req.params.itemId},
-//         {$set: {completed:false}} );
-//       res.redirect('/transaction')
-// });
-
 router.get('/transaction/edit/:itemId',
   isLoggedIn,
   async (req, res, next) => {
@@ -140,8 +137,7 @@ router.get('/transaction/edit/:itemId',
 //       const {itemId,item,priority} = req.body;
 //       console.log("inside /transaction/complete/:itemId");
 //       await TransactionItem.findOneAndUpdate(
-//         {_id:itemId},
-//         {$set: {item,priority}} );
+//         {_id:itemId}
 //       res.redirect('/transaction')
 // });
 

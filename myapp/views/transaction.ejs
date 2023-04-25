@@ -33,7 +33,7 @@
         <% if (show === 'group-by-category') { %>
           <% items.forEach(category => { %>
             <tr>
-              <td><%= category.category %></td>
+              <td><%= category._id %></td>
               <td><%= category.totalAmount %></td>
             </tr>
           <% }) %>
