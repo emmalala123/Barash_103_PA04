@@ -91,10 +91,8 @@ router.get('/todo/edit/:itemId',
       console.log("inside /todo/edit/:itemId")
       const item = 
        await ToDoItem.findById(req.params.itemId);
-      //res.render('edit', { item });
       res.locals.item = item
       res.render('edit')
-      //res.json(item)
 });
 
 router.post('/todo/updateTodoItem',

@@ -59,23 +59,6 @@ router.get('/transaction/',
             },
             { $sort: { _id: 1 } }
         ]);
-        // router.get('/transaction/group-by-category',
-        // async (req, res, next) => {
-        //     let results =
-        //           await Transaction.aggregate(
-        //               [ 
-        //                 {$group:{
-        //                   _id:'$userId',
-        //                   total:{$count:{}}
-        //                   }},
-        //                 {$sort:{total:-1}},              
-        //               ])
-                    
-        //       results = 
-        //          await User.populate(results,
-        //                  {path:'_id',
-        //                  select:['username','age']})
-        //          });
         break;
 
       default:
@@ -119,27 +102,25 @@ router.get('/transaction/remove/:itemId',
       res.redirect('/transaction')
 });
 
-router.get('/transaction/edit/:itemId',
+router.get('/transaction/editTransaction/:itemId',
   isLoggedIn,
   async (req, res, next) => {
-      console.log("inside /transaction/edit/:itemId")
-      const item = 
-       await Transaction.findById(req.params.itemId);
-      //res.render('edit', { item });
+      console.log("inside /transaction/editTransaction/:itemId")
+      const item = await Transaction.findById(req.params.itemId);
       res.locals.item = item
-      res.render('edit')
-      //res.json(item)
+      res.render('editTransaction')
 });
 
-// router.post('/transaction/updateTransactionItem',
-//   isLoggedIn,
-//   async (req, res, next) => {
-//       const {itemId,item,priority} = req.body;
-//       console.log("inside /transaction/complete/:itemId");
-//       await TransactionItem.findOneAndUpdate(
-//         {_id:itemId}
-//       res.redirect('/transaction')
-// });
+router.post('/transaction/updateTransactionItem',
+  isLoggedIn,
+  async (req, res, next) => {
+      const { itemId, description, amount, category } = req.body;
+      console.log("inside /transaction/:itemId");
+      await Transaction.findOneAndUpdate(
+        {_id:itemId},
+        {$set: {description, amount, category}} );
+      res.redirect('/transaction')
+});
 
 router.get('/transaction/byUser',
   isLoggedIn,

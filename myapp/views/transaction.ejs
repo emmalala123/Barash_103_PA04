@@ -24,8 +24,10 @@
             <tr>
             <th>description</th>
             <th>amount</th>
-            <th>category</th>
+            <th>category</th> 
             <th>date</th>
+            <th>edit</th>
+            <th>delete</th>
             </tr>
             <% } %>
     </thead>
@@ -44,7 +46,7 @@
                <td><%= item.amount %></td>
                <td><%= item.category %></td>
                <td><%= item.createdAt %></td>
-               <td><a href="/transaction/edit/<%=item._id %>">
+               <td><a href="/transaction/editTransaction/<%=item._id %>">
                <i class="bi bi-pencil-square"></i></a></td>
                <td><a href="/transaction/remove/<%=item._id %>">
                 <i class="bi bi-trash"></i></a></td>
